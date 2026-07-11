@@ -8,6 +8,7 @@
   "tipi_version": 1,
   "version": "1.6.0",
   "categories": [
+    "security",
     "utilities"
   ],
   "short_desc": "Clientless remote desktop gateway supporting RDP, VNC and SSH.",
@@ -15,13 +16,12 @@
   "author": "flcontainers",
   "source": "https://github.com/flcontainers/guacamole",
   "website": "https://guacamole.apache.org/",
-  "icon": "./apache-guacamole.png"
   "form_fields": [],
   "supported_architectures": [
     "amd64",
     "arm64"
   ],
-  "created_at": 1783850000000,
-  "updated_at": 1783850000000,
+  "created_at": 1767225600000,
+  "updated_at": 1767225600000,
   "min_tipi_version": "4.5.0"
 }
