@@ -1,0 +1,27 @@
+{
+  "name": "Guacamole",
+  "id": "flcontainers-guacamole",
+  "available": true,
+  "dynamic_config": true,
+  "port": 8095,
+  "tipi_version": 2,
+  "version": "1.6.0",
+  "categories": [
+    "utilities",
+    "remote-access"
+  ],
+  "short_desc": "Clientless remote desktop gateway supporting RDP, VNC and SSH.",
+  "description": "Apache Guacamole is a clientless remote desktop gateway that allows you to securely access RDP, VNC and SSH sessions directly from your web browser.",
+  "author": "flcontainers",
+  "source": "https://github.com/flcontainers/guacamole",
+  "website": "https://guacamole.apache.org/",
+  "icon": "https://raw.githubusercontent.com/walkxcode/dashboard-icons/main/png/apache-guacamole.png",
+  "supported_architectures": [
+    "amd64",
+    "arm64"
+  ],
+  "created_at": 1783735804000,
+  "updated_at": 1783735804000,
+  "$schema": "../app-info-schema.json",
+  "min_tipi_version": "4.5.0"
+}
