@@ -1,0 +1,147 @@
+FileBrowser Quantum — Runtipi Git repository setup
+
+For this container, the Git repository needs to provide a current Runtipi compose definition and ensure the required config.yaml exists in the persistent data folder.
+
+1. Use this docker-compose.yml
+x-runtipi:
+  schema_version: 2
+
+services:
+  filebrowser-quantum:
+    image: gtstef/filebrowser:1.4.0-stable
+    restart: unless-stopped
+
+    environment:
+      - TZ=${TZ}
+      - FILEBROWSER_CONFIG=/home/filebrowser/data/config.yaml
+      - FILEBROWSER_DATABASE=/home/filebrowser/data/database.db
+
+    volumes:
+      - ${APP_DATA_DIR}/data:/home/filebrowser/data
+      - ${APP_DATA_DIR}/srv:/srv
+
+    x-runtipi:
+      internal_port: 80
+      is_main: true
+
+Important points:
+
+FileBrowser listens on port 80 inside the container.
+The user-selected Runtipi port can be something else, such as 8080.
+Runtipi handles the port mapping and main network.
+Do not add the old tipi_main_network definition.
+Do not add runtipi.managed labels.
+Do not add a manual ports: section.
+
+The resulting port flow is:
+
+Runtipi host port 8080 → container port 80
+2. Create the required persistent folders
+
+For a custom app named filebrowser-quantum, Runtipi stores its data here:
+
+~/runtipi/app-data/_user/filebrowser-quantum/
+
+The compose file maps:
+
+Host:
+~/runtipi/app-data/_user/filebrowser-quantum/data
+
+Container:
+/home/filebrowser/data
+
+and:
+
+Host:
+~/runtipi/app-data/_user/filebrowser-quantum/srv
+
+Container:
+/srv
+
+Create the folders if Runtipi has not already created them:
+
+mkdir -p ~/runtipi/app-data/_user/filebrowser-quantum/data
+mkdir -p ~/runtipi/app-data/_user/filebrowser-quantum/srv
+3. Create config.yaml
+
+FileBrowser Quantum will not start without this file:
+
+~/runtipi/app-data/_user/filebrowser-quantum/data/config.yaml
+
+Create it:
+
+sudo nano ~/runtipi/app-data/_user/filebrowser-quantum/data/config.yaml
+
+Use:
+
+server:
+  port: 80
+  database: /home/filebrowser/data/database.db
+  sources:
+    - path: /srv
+      name: Files
+
+Make sure it is readable:
+
+sudo chmod 755 ~/runtipi/app-data/_user/filebrowser-quantum/data
+sudo chmod 644 ~/runtipi/app-data/_user/filebrowser-quantum/data/config.yaml
+
+Do not manually create an empty database.db. FileBrowser will create and initialise it automatically.
+
+4. Install the app
+
+During installation:
+
+Open port: Enabled
+Port: 8080
+Internal port: 80
+
+The Runtipi installation port is the port you use from your browser:
+
+http://RUNTIPI-IP:8080
+
+The compose file must still contain:
+
+internal_port: 80
+5. Expected first-start logs
+
+On the first successful start, logs similar to these are normal:
+
+database file could not be found
+Creating new database: /home/filebrowser/data/database.db
+Sources: [Files: /srv]
+Running at: http://0.0.0.0/
+
+The initial database warning is harmless when followed by:
+
+Creating new database
+
+After startup, this should exist:
+
+ls -l ~/runtipi/app-data/_user/filebrowser-quantum/data
+
+Expected:
+
+config.yaml
+database.db
+Git repository checklist
+
+For this particular app, the repository should contain at least:
+
+apps/
+└── filebrowser-quantum/
+    ├── config.json
+    └── docker-compose.yml
+
+The critical requirements are:
+
+docker-compose.yml uses schema version 2
+Main service has is_main: true
+Internal port is 80
+Persistent data is mounted to /home/filebrowser/data
+Browsable files are mounted to /srv
+FILEBROWSER_CONFIG points to config.yaml
+FILEBROWSER_DATABASE points to database.db
+config.yaml exists before the container starts
+
+The original alternative app-store definition failed because it either used outdated Runtipi networking configuration or treated 8700 as the container’s internal port. For this image, 8700 or 8080 may be used as the host port, but the container port remains 80.
