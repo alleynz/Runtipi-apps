@@ -1,0 +1,17 @@
+x-runtipi:
+  schema_version: 2
+
+services:
+  flcontainers-guacamole:
+    image: flcontainers/guacamole:1.6.0
+    restart: unless-stopped
+
+    environment:
+      TZ: ${TZ}
+
+    volumes:
+      - ${APP_DATA_DIR}/config:/config
+
+    x-runtipi:
+      internal_port: 8080
+      is_main: true
