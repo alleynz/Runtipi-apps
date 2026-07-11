@@ -1,6 +1,6 @@
 {
   "name": "Apache Guacamole",
-  "id": "apps/Guacamole",
+  "id": "Guacamole",
   "available": true,
   "dynamic_config": true,
   "port": 8090,
