@@ -1,0 +1,21 @@
+x-runtipi:
+  schema_version: 2
+
+services:
+  flcontainers-guacamole:
+    image: flcontainers/guacamole:1.6.0
+    restart: unless-stopped
+
+    environment:
+      - TZ=Pacific/Auckland
+      - EXTENSIONS=auth-totp,auth-ban
+
+    volumes:
+      - ${APP_DATA_DIR}/config:/config
+
+    ports:
+      - "${APP_PORT}:8080"
+
+    x-runtipi:
+      internal_port: 8080
+      is_main: true
